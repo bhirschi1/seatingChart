@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import indexPageView, seatingChartView
+from .views import index
 
 urlpatterns = [
-    path('', indexPageView, name='index'),
-    path('chart', seatingChartView, name='chart'),
+    path('', index, name='index'),
 ]
+
+
