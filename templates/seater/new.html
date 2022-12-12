@@ -15,18 +15,21 @@ And then it will go through the students who can't sit by each other, and then t
     <title>Stuff</title>
 </head>
 <body>
-    <div class = 'textwrapper'>
-        <h4>What are the dimensions of your classroom?</h4>
-        <label for="numColumns">Columns: </label>
-        <input type="number" id="numColumns" name="numColumns" >
-        <label for="numRows">Rows: </label>
-        <input type="number" id="numRows" name="numRows" >
-        
-        <label for="numStudent">Enter Number of Students: </label> 
-        <input type="number" id="numStudent" name="numStudent" > 
-<!--We will eventually get rid of this and add it dynamically based on the amount of students they added to the database-->
-        <button type = 'button' id="orderStudents">Randomize Students</button>
-    </div>
+    <form name="form" method="post" action="{% url 'generate' %}">
+        {% csrf_token %}
+        <div class = 'textwrapper'>
+            <h4>What are the dimensions of your classroom?</h4>
+            <label for="numColumns">Columns: </label>
+            <input type="number" id="numColumns" name="numColumns" >
+            <label for="numRows">Rows: </label>
+            <input type="number" id="numRows" name="numRows" >
+            
+            <label for="numStudent">Enter Number of Students: </label> 
+            <input type="number" id="numStudent" name="numStudent" > 
+    <!--We will eventually get rid of this and add it dynamically based on the amount of students they added to the database-->
+            <button type = 'button' id="orderStudents">Randomize Students</button>
+        </div>
+    </form>
         <div class = 'wrapper' id="wrapper"> 
         </div>
       

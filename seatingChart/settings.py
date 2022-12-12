@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'seatingChart.wsgi.application'
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'student_seating',
+    'NAME': 'seating',
     'USER': 'postgres',
     'PASSWORD': 'Hirsch3873',
     'HOST': 'localhost', 

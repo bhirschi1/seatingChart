@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="text-left">
+        <h2 class="section-heading text-uppercase">Student</h2>
+    </div>
+    <br> 
+        <h2>Students that {{student.fName}} {{student.lName}} cannot sit next to:</h2>
+        <br><br>
+        {{rest}}
+
+    <form name="form" method="post" action="{% url 'updateRestrictions' stud_id=student.studentID %}">
+        {% csrf_token %}
+
+        <label for='bads'>Select New Restriction:</label>
+        <select name="bads" id="bads">
+            {% for people in allRests %}
+                {% if people == rest %}
+                <option value="{{people.studentID}}" selected>{{people.fName}}</option>
+                {% else %}
+                <option value="{{people.studentID}}">{{people.fName}}</option>
+                {% endif %}
+            {% endfor %} </select>
+
+        <input type="hidden" id="studentID" name="studentID" value="{{student.studentID}}">
+        <button type="submit">Update Changes</button>
+    </form>
+
+        
+    
+{% endblock %}

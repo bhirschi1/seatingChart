@@ -4,10 +4,29 @@
 <div class = "border p-3 shadow">
     <h4>Add Student</h4>
     <hr>
-    <form method="POST">
+    <form method='POST' action="{% url 'index' %}">
         {% csrf_token %}
-        {{ form }}
-        <input class = 'btn btn-success btn-block' type='submit' value = 'Add'>
+        <label for='fName'>First Name: </label>
+        <input type='text' name='fName' id='fName'>
+        <label for="lName">Last Name: </label>
+        <input type="text" name="lName" id="lName">
+        <br><br>
+        <label for="front">Sit closer to the front?</label>
+        <input type="checkbox" id="front" name="front" value="T">
+        <br><br>
+        <label for="neighbor">Select a Student they cannot sit by</label>
+        <select>
+            <option name='neighbor' value="none" selected></option>
+        {% for student in data %}
+            <option name='neighbor' value="{{student.limitNum}}">{{student.fName}}</option>
+        {% endfor %} </select>
+        
+       <br>
+       <button type="submit">Add Student</button>
     </form>
 </div>
+<form method='POST' action="{% url 'viewList' %}">
+    {% csrf_token %}
+    <button type="submit" id='viewList'>View Student List</button>
+</form>
 {% endblock %}
