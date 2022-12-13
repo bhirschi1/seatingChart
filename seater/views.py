@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import student
 from .forms import studentForm
+from json import dumps
 
 def createStudent(variables):
     newStud = student()
@@ -10,6 +11,9 @@ def createStudent(variables):
     newStud.restrictionNum = variables[2]
 
     newStud.save()
+
+def homePageView(request) :
+    return render(request, 'seater/homepage.html')
         
 
 def index(request):
@@ -46,12 +50,21 @@ def indexPageView(request):
     return render(request, 'seater/index.html')
 
 def generatePageView(request) :
+    list = studList()
     data = student.objects.all()
+    nameList = []
+    for name in list:
+        first = name.fName
+        rest = name.restrictionNum
+        listitem = [first, rest]
+        nameList.append(listitem)
+        
 
-    context = {
-        'data' : data
-    }
-    return render(request, 'seater/new.html', context)
+    # context = {
+    #     'list': nameList
+    # }
+    dataJSON = dumps(nameList)
+    return render(request, 'seater/new.html', {'data': dataJSON})
 
 def viewListPageView(request) :
     data = student.objects.all()
@@ -121,7 +134,7 @@ def deleteStudPageView(request, stud_id) :
     return render(request, 'seater/viewList.html', context)
 
 
-def studList(request):
+def studList():
     studs = student.objects.all()
     newList = []
     for stud in studs:
@@ -133,11 +146,8 @@ def studList(request):
         if stud.restrictionNum == 0:
             newList.append(stud)
 
-    context = {
-        'studs' : newList
-    }
 
-    return render(request, 'seater/test.html', context)
+    return newList
 
 
 def deleteAll(request):

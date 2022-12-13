@@ -1,22 +1,10 @@
-<!--THOUGHTS:
-We should change the limits. I think it should be: 0 = no limit, 10 =front row, 1-9 = students who can't sit next to each other
-If we do it this way, it will make it so that we can organize the list and loop through and assign the front row kids first. 
-otherwise, those spots may be taken when the loop gets to them and it won't allow them to stay in the front row. 
-And then it will go through the students who can't sit by each other, and then the students who have no problems. 
-
--->
 {% extends 'base.html' %}
 {% load static %}
+{% block nav %}
+    <header class="masthead" style="background-image: url('img/class.jpg')" >
+    </header>
+{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css.css">
-    <title>Stuff</title>
-</head>
 <body>
     <form name="form" method="post" action="{% url 'generate' %}">
         {% csrf_token %}
@@ -27,47 +15,51 @@ And then it will go through the students who can't sit by each other, and then t
             <label for="numRows">Rows: </label>
             <input type="number" id="numRows" name="numRows" >
             
-            <label for="numStudent">Enter Number of Students: </label> 
-            <input type="number" id="numStudent" name="numStudent" > 
+            <label for="numStudent">Number of Students: </label> 
+            <input type="number" id="numStudent" name="numStudent"> 
     <!--We will eventually get rid of this and add it dynamically based on the amount of students they added to the database-->
             <button type = 'button' id="orderStudents">Randomize Students</button>
         </div>
     </form>
+    <div class = 'newContainer'>
         <div class = 'wrapper' id="wrapper"> 
         </div>
+    </div>
       
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-
-
-// eventually this code will have to change, but right now, it takes the value input by the user of how many students there are.
-// then, it adds a div to the wrapper div for each student.
 // we will have to change this to dynamically add the student names.
 // possibly use $('#wrapper').append('<div class ="studdiv">' +  Student[i].firstName  + '</div>');
 // we will want the view to give us the student names in a list, ordered in reverse order by limit (3,2,1,0) 0 being no limits
-    $('#numStudent').on('change', function(){
-    let n = $(this).val()
+data = JSON.parse("{{data|escapejs}}");
+
+document.getElementById("orderStudents").addEventListener("click", orderStudents);
+
+document.getElementById('numStudent').value = data.length;
+console.log(data.length)
+
+$(window).ready(function () {   
+    n = data.length
     $('#wrapper').html('');
     for (var i = 0; i < n; i++){
-//      Student[i].studFirstName = studFirstName
-//      Student[i].limit = limit
-//      $('#wrapper').append('<div class ="studdiv">' +  studFirstName ' ' + limit + '</div>');
-        $('#wrapper').append('<div class ="studdiv"> Student ' + (i+1) + '</div>');
-    }
-    });
+        studFirstName = data[i][0]
+        restriction = data[i][1]
+        console.log(studFirstName + ' ' + restriction)
+        $('#wrapper').append('<div class ="studdiv">' +  studFirstName + ' ' + restriction + '</div>');
+}
+});
 
 
-// event listener to randomize students when clicked
-document.getElementById("orderStudents").addEventListener("click", orderStudents);
 
 function orderStudents() {
     numColumns = Number(document.getElementById('numColumns').value)
     numRows = Number(document.getElementById('numRows').value)
     numStudent = Number(document.getElementById('numStudent').value)
-
-// the if statement makes sure that the number of students entered will fit in the rows and columns. 
-// Without this if statement the code will run forever and CRASH AND BURN
+    console.log(numStudent)
+    ChosenPosition = []
+    // the if statement makes sure that the number of students entered will fit in the rows and columns. 
+    // Without this if statement the code will run forever and CRASH AND BURN
     if ((numColumns * numRows) < numStudent) {
         alert("You have entered too many students to fit in the columns/rows specified!");
     } 
@@ -75,80 +67,64 @@ function orderStudents() {
 
         divs = document.getElementsByClassName('studdiv');
 
-// empty list to keep track of if a seat is already taken. 
-// It will simply have the concatenated rows and columns. Ex. row 1 and column 4 = 14;
-        ChosenPosition = []
+        // empty list to keep track of if a seat is already taken. 
+        // It will simply have the concatenated rows and columns. Ex. row 1 and column 4 = 14;
+       // ChosenPosition = []
 
-// Loop through the divs and assign a random grid row and column to each one
+        // Loop through the divs and assign a random grid ro w and column to each one
         for (i = 0; i < divs.length; i++) {
             div = divs[i];
-
-// this returns the limit associated with the student
             text = div.innerHTML
             array = text.split(" ");
-            limit = array[2];
+            limit = Number(array[1]);
+            console.log(limit)
+ 
+            if (limit == 1) {
+                row = 1
+                col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
+                rowvalue = row.toString()
+                colvalue = col.toString()
+                value = rowvalue + colvalue
 
-// when limit = 1 (maybe? i forgot which number it was), the student needs to sit in the front row.
-// we need to find a way to order the list of students and limits in reverse order (0 means they have no limits)
-//          if (limit == 1) {
-//              row = 1
-//              col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
-//              rowvalue = row.toString()
-//              colvalue = col.toString()
-//              value = rowvalue + colvalue
+                while (ChosenPosition.includes(value)){
+                    row =  1; 
+                    col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
+                    rowvalue = row.toString()
+                    colvalue = col.toString()
+                    value = rowvalue + colvalue
+                }    
+                // adds the new concatenated value to the list
+                ChosenPosition.push((value))
 
-//              while (ChosenPosition.includes(value)){
-//                row =  1; 
-//                col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
-//                rowvalue = row.toString()
-//                colvalue = col.toString()
-//                value = rowvalue + colvalue
-//              } 
-// adds the new concatenated value to the list
-//              ChosenPosition.push((value))
-  
-// Use the CSS grid-row and grid-column properties to position the div at the random coordinates
-//              div.style.gridRow = row;
-//              div.style.gridColumn = col;
-//          } 
-//          else {
-
-// assigns random row and column to each student
-            row = Math.floor(Math.random() * numRows) + 1; // Generate a random grid row
-            col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
-            rowvalue = row.toString()
-            colvalue = col.toString()
-            value = rowvalue + colvalue
-
-// checks to make sure the position isn't already occupied. if it is, it reassigns it.
-            while (ChosenPosition.includes(value)){
+                // Use the CSS grid-row and grid-column properties to position the div at the random coordinates
+                div.style.gridRow = row;
+                div.style.gridColumn = col;
+            }
+            else {
                 row = Math.floor(Math.random() * numRows) + 1; // Generate a random grid row
                 col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
                 rowvalue = row.toString()
                 colvalue = col.toString()
                 value = rowvalue + colvalue
-            } 
-// adds the new concatenated value to the list
-            ChosenPosition.push((value))
-  
-  // Use the CSS grid-row and grid-column properties to position the div at the random coordinates
-            div.style.gridRow = row;
-            div.style.gridColumn = col;
-            //}
+
+                // checks to make sure the position isn't already occupied. if it is, it reassigns it.
+                while (ChosenPosition.includes(value)){
+                    row = Math.floor(Math.random() * numRows) + 1; // Generate a random grid row
+                    col = Math.floor(Math.random() * numColumns) + 1; // Generate a random grid column
+                    rowvalue = row.toString()
+                    colvalue = col.toString()
+                    value = rowvalue + colvalue
+                } 
+                // adds the new concatenated value to the list
+                ChosenPosition.push((value))
+
+                // Use the CSS grid-row and grid-column properties to position the div at the random coordinates
+                div.style.gridRow = row;
+                div.style.gridColumn = col;
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 </script>
 </html>
 {% endblock %}
