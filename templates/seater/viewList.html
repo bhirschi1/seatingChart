@@ -5,6 +5,7 @@
 </header>
 {% endblock %}
 {% block content %}
+<div class="center">
 <table>
     <tr>
       <th>First Name</th>
@@ -25,3 +26,4 @@
 </table>
 <form name="form" method="post" action="{% url 'deleteAll' %}">{% csrf_token %}<button>Delete All Students</button></form>
 {% endblock %}
+</div>

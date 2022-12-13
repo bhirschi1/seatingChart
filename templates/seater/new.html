@@ -10,13 +10,16 @@
         {% csrf_token %}
         <div class = 'textwrapper'>
             <h4>What are the dimensions of your classroom?</h4>
+            <div class='newcss'>
             <label for="numColumns">Columns: </label>
             <input type="number" id="numColumns" name="numColumns" >
             <label for="numRows">Rows: </label>
             <input type="number" id="numRows" name="numRows" >
             
-            <label for="numStudent">Number of Students: </label> 
-            <input type="number" id="numStudent" name="numStudent"> 
+            {% comment %} <label for="numStudent">Number of Students: </label> 
+            <input type="number" id="numStudent" name="numStudent">  {% endcomment %}
+            <p id='numStudent'></p>
+            </div>
     <!--We will eventually get rid of this and add it dynamically based on the amount of students they added to the database-->
             <button type = 'button' id="orderStudents">Randomize Students</button>
         </div>
@@ -36,7 +39,7 @@ data = JSON.parse("{{data|escapejs}}");
 
 document.getElementById("orderStudents").addEventListener("click", orderStudents);
 
-document.getElementById('numStudent').value = data.length;
+document.getElementById('numStudent').innerHTML = ('Number of Students: ' + data.length);
 console.log(data.length)
 
 $(window).ready(function () {   
@@ -55,7 +58,7 @@ $(window).ready(function () {
 function orderStudents() {
     numColumns = Number(document.getElementById('numColumns').value)
     numRows = Number(document.getElementById('numRows').value)
-    numStudent = Number(document.getElementById('numStudent').value)
+    numStudent = Number(data.length)
     console.log(numStudent)
     ChosenPosition = []
     // the if statement makes sure that the number of students entered will fit in the rows and columns. 
