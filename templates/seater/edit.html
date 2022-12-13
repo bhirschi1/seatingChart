@@ -20,17 +20,10 @@
         <br><br>
 
 
-        <label for='front'>Front:</label>
-        <input type="checkbox" name='front' id='front' value="T"{% if student.front is True %} checked {% endif %} >
+        <label for='front'>Row Number:</label>
+        <input type="number" name='restrictionNum' id='restrictionNum' value="{{student.restrictionNum}}" >
         <br><br>
         <button type="submit">Update</button>
     </form><br>
-
-    <form name="form" method="post" action="{% url 'changeRestrictions' stud_id=student.studentID %}">
-        {% csrf_token %}
-        <label><br>List of Restrictions:<br></label>
-        <p> {{ rest.fName }} </p>
-        <button type="submit">Change Restrictions</button>
-    </form>
 </div>
 {% endblock %}

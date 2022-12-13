@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import index, generatePageView, viewListPageView, editStudPageView, editSingleStudentPageView, saveRestsPageView, deleteStudPageView, changeRestrictionsPageView
+from .views import index, indexPageView, generatePageView, viewListPageView, editStudPageView, editSingleStudentPageView, saveRestsPageView, deleteStudPageView, changeRestrictionsPageView
 
 urlpatterns = [
     path('', index, name='index'),
+    path('index/', indexPageView, name='indexNav'),
     path('generate/', generatePageView, name='generate'),
     path('viewList/', viewListPageView, name='viewList'),
     path('edit/<int:stud_id>/', editStudPageView, name='editStud'),

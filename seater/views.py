@@ -7,11 +7,7 @@ def createStudent(variables):
     newStud = student()
     newStud.fName = variables[0]
     newStud.lName = variables[1]
-
-    if variables[2] == "T" :
-        newStud.front = True
-    else :
-        newStud.front = False
+    newStud.restrictionNum = variables[2]
 
     newStud.save()
         
@@ -21,8 +17,8 @@ def index(request):
     if request.method == 'POST':
         fName = request.POST.get('fName')
         lName = request.POST.get('lName')
-        frontVar = request.POST.get('front')
-        variables = [fName, lName, frontVar]
+        restrictionNum = request.POST.get('restrictionNum')
+        variables = [fName, lName, restrictionNum]
 
         createStudent(variables)
 
@@ -46,6 +42,9 @@ def index(request):
     }
     return render(request, 'seater/index.html', context)
 
+def indexPageView(request):
+    return render(request, 'seater/index.html')
+
 def generatePageView(request) :
     data = student.objects.all()
 
@@ -66,15 +65,8 @@ def viewListPageView(request) :
 def editStudPageView(request, stud_id) :
     stud = student.objects.get(studentID = stud_id)
 
-    rest = restriction.objects.filter(studentID = stud_id)
-    if rest :
-        currRests = restriction.objects.get(studentID = stud_id)
-    else :
-        currRests = None
-
     context = {
-        'student' : stud,
-        'rest' : currRests,
+        'student' : stud
     }
     return render(request, 'seater/edit.html', context)
 
@@ -84,12 +76,7 @@ def editSingleStudentPageView(request, stud_id) :
 
     editStud.fName = request.POST.get('fName')
     editStud.lName = request.POST.get('lName')
-    frontVal = request.POST.get('front')
-
-    if frontVal == "T" :
-        editStud.front = True
-    else :
-        editStud.front = False
+    editStud.restrictionNum = request.POST.get('restrictionNum')
     
     editStud.save()
 
@@ -109,43 +96,17 @@ def editSingleStudentPageView(request, stud_id) :
 def changeRestrictionsPageView(request, stud_id) :
     stud = student.objects.get(studentID = stud_id)
 
-    rest = restriction.objects.filter(studentID = stud_id)
-    allBads = student.objects.all()
-
     context = {
-        'student' : stud,
-        'rest' : rest,
-        'allRests' : allBads
+        'student' : stud
     }
     return render(request, 'seater/restrictions.html', context)
 
 def saveRestsPageView(request, stud_id) :
 
-
-    rest = restriction.objects.filter(studentID = stud_id)
-    if rest :
-        changeRest = restriction.objects.get(studentID = request.POST.get('bads'))
-        tryRest = student.objects.get(studentID = stud_id)
-        tryBad = student.objects.get(studentID = request.POST.get('bads'))
-        changeRest.badID = tryBad
-        changeRest.studentID = tryRest
-
-        changeRest.save()
-    else :
-        currRest = restriction()
-        tryRest = student.objects.get(studentID = stud_id)
-        tryBad = student.objects.get(studentID = request.POST.get('bads'))
-        currRest.badID = tryBad
-        currRest.studentID = tryRest
-        
-        currRest.save()
-
     stud = student.objects.get(studentID = stud_id)
-    newRest = student.objects.get(studentID = request.POST.get('bads'))
 
     context = {
-        'student' : stud,
-        'rest' : newRest,
+        'student' : stud
     }
     return render(request, 'seater/edit.html', context)
 

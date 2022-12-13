@@ -5,22 +5,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Seating Chart</title>
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
 </head>
 <body>
     <nav class="navbar" id="navbar">
         <div class="navdiv">
                 <ul class="nav_ul">
-                    <form method='POST' action="{% url 'index' %}">
+                    <form method='POST' action="{% url 'indexNav' %}">
                         {% csrf_token %}
-                        <button type="submit" id='viewList'>Add Student</button>
-                        <input type='hidden' name='fName' id='fName' value=" ">
-                        <input type='hidden' name='lName' id='lName' value=" ">
+                        <button type="submit" id='addStudent'>Add Student</button>
                     </form>
                     <form method='POST' action="{% url 'viewList' %}">
                         {% csrf_token %}
                         <button type="submit" id='viewList'>View Student List</button>
+                    </form>
+                    <form method='POST' action="{% url 'generate' %}">
+                        {% csrf_token %}
+                        <button type="submit" id='generate'>Generate Seating Chart</button>
                     </form>
                 </ul>
         </div>
@@ -36,9 +38,7 @@
 
 
     </header> {% endcomment %}
-    <p> We love to travel</p>
     {% block content %}
-    heyyyyyyyyy
     {% endblock %}
 </body>
 </html>

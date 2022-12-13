@@ -5,12 +5,14 @@
     <tr>
       <th>First Name</th>
       <th>Last Name</th>
+      <th>Row Number</th>
       <th>Options</th>
     </tr>
     {% for student in students %}
         <tr>
             <td>{{student.fName}}</td> 
             <td>{{student.lName}}</td>
+            <td>{{student.restrictionNum}}</td>
             <td><form name="form" method="post" action="{% url 'editStud' stud_id=student.studentID %}">{% csrf_token %}<button>Edit</button></form>
             <form name="form" method="post" action="{% url 'deleteStud' stud_id=student.studentID %}">{% csrf_token %}<button>Delete</button></form></td>
         </tr>
