@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+# Authors: Matthias Hulme, Sidney Eaton, Nate Conrad, Ben Hirschi
+# Group 1-7
+
 from pathlib import Path
 import os
 
