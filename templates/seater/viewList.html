@@ -19,4 +19,5 @@
         
     {% endfor %}
 </table>
+<form name="form" method="post" action="{% url 'deleteAll' %}">{% csrf_token %}<button>Delete All Students</button></form>
 {% endblock %}

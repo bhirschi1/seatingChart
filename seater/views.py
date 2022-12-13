@@ -119,3 +119,35 @@ def deleteStudPageView(request, stud_id) :
         'students' : data
     }
     return render(request, 'seater/viewList.html', context)
+
+
+def studList(request):
+    studs = student.objects.all()
+    newList = []
+    for stud in studs:
+        
+        if stud.restrictionNum > 0 :
+            newList.append(stud)
+
+    for stud in studs:
+        if stud.restrictionNum == 0:
+            newList.append(stud)
+
+    context = {
+        'studs' : newList
+    }
+
+    return render(request, 'seater/test.html', context)
+
+
+def deleteAll(request):
+    data = student.objects.all()
+    for stud in data:
+        stud.delete()
+
+    return render(request, 'seater/viewList.html')
+
+
+
+
+

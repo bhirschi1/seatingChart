@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, indexPageView, generatePageView, viewListPageView, editStudPageView, editSingleStudentPageView, saveRestsPageView, deleteStudPageView, changeRestrictionsPageView
+from .views import index, indexPageView, generatePageView, viewListPageView, editStudPageView, editSingleStudentPageView, saveRestsPageView, deleteStudPageView, changeRestrictionsPageView, studList, deleteAll
 
 urlpatterns = [
     path('', index, name='index'),
@@ -11,6 +11,8 @@ urlpatterns = [
     path('delete/<int:stud_id>/', deleteStudPageView, name='deleteStud'),
     path('restrictions/<int:stud_id>/', changeRestrictionsPageView, name='changeRestrictions'),
     path('saveRests/<int:stud_id>/', saveRestsPageView, name='updateRestrictions'),
+    path('testList/', studList, name='studList'),
+    path('deleteAll/', deleteAll, name='deleteAll'),
 ]
 
 
