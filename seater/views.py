@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import student
-from .models import restriction
 from .forms import studentForm
 
 def createStudent(variables):
@@ -25,22 +24,22 @@ def index(request):
         frontVar = request.POST.get('front')
         variables = [fName, lName, frontVar]
 
-        newStud = createStudent(variables)
+        createStudent(variables)
 
 
-        stud = student.objects.get(studentID = newStud.studentID)
-        selected = request.POST.get('neighbor')
-        if not selected == 'none':
-            badid = restriction()
-            badid.badID = request.POST.get('neighbor')
-            badid.studentID = stud.studentID
+        # stud = student.objects.get(studentID = newStud.studentID)
+        # selected = request.POST.get('neighbor')
+        # if not selected == 'none':
+        #     badid = restriction()
+        #     badid.badID = request.POST.get('neighbor')
+        #     badid.studentID = stud.studentID
     # destList = []
 
     # destList = request.POST.getlist('dests')
     # for i in destList :
     #     newCust.restriction.add(student.objects.get(id=i))
 
-            badid.save()
+            # badid.save()
             
     context = {
         'data': data,
@@ -66,11 +65,16 @@ def viewListPageView(request) :
 
 def editStudPageView(request, stud_id) :
     stud = student.objects.get(studentID = stud_id)
-    rest = restriction.objects.get(studentID = stud_id)
+
+    rest = restriction.objects.filter(studentID = stud_id)
+    if rest :
+        currRests = restriction.objects.get(studentID = stud_id)
+    else :
+        currRests = None
 
     context = {
         'student' : stud,
-        'rest' : rest,
+        'rest' : currRests,
     }
     return render(request, 'seater/edit.html', context)
 
@@ -117,19 +121,31 @@ def changeRestrictionsPageView(request, stud_id) :
 
 def saveRestsPageView(request, stud_id) :
 
-    currRest = restriction.objects.get(studentID = stud_id)
-    currRest.badID = student.objects.get(studentID = request.POST.get('bads'))
-    
-    currRest.save()
 
+    rest = restriction.objects.filter(studentID = stud_id)
+    if rest :
+        changeRest = restriction.objects.get(studentID = request.POST.get('bads'))
+        tryRest = student.objects.get(studentID = stud_id)
+        tryBad = student.objects.get(studentID = request.POST.get('bads'))
+        changeRest.badID = tryBad
+        changeRest.studentID = tryRest
 
+        changeRest.save()
+    else :
+        currRest = restriction()
+        tryRest = student.objects.get(studentID = stud_id)
+        tryBad = student.objects.get(studentID = request.POST.get('bads'))
+        currRest.badID = tryBad
+        currRest.studentID = tryRest
+        
+        currRest.save()
 
     stud = student.objects.get(studentID = stud_id)
-    rest = restriction.objects.get(studentID = stud_id)
+    newRest = student.objects.get(studentID = request.POST.get('bads'))
 
     context = {
         'student' : stud,
-        'rest' : rest,
+        'rest' : newRest,
     }
     return render(request, 'seater/edit.html', context)
 

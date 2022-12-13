@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 <div class = "border p-3 shadow">
@@ -14,19 +15,15 @@
         <label for="front">Sit closer to the front?</label>
         <input type="checkbox" id="front" name="front" value="T">
         <br><br>
-        <label for="neighbor">Select a Student they cannot sit by</label>
+        <!-- <label for="neighbor">Select a Student they cannot sit by</label>
         <select>
             <option name='neighbor' value="none" selected></option>
         {% for student in data %}
             <option name='neighbor' value="{{student.limitNum}}">{{student.fName}}</option>
-        {% endfor %} </select>
+        {% endfor %} </select> -->
         
        <br>
        <button type="submit">Add Student</button>
     </form>
 </div>
-<form method='POST' action="{% url 'viewList' %}">
-    {% csrf_token %}
-    <button type="submit" id='viewList'>View Student List</button>
-</form>
 {% endblock %}

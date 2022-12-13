@@ -5,6 +5,9 @@ otherwise, those spots may be taken when the loop gets to them and it won't allo
 And then it will go through the students who can't sit by each other, and then the students who have no problems. 
 
 -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -148,3 +151,4 @@ function orderStudents() {
 
 </script>
 </html>
+{% endblock %}

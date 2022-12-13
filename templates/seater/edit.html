@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 <div class="container">
     <div class="text-left">
-        <h2 class="section-heading text-uppercase">Student</h2>
+        <h2 class="section-heading text-uppercase">{{student.fName}} {{student.lName}}</h2>
     </div>
     <br> 
     <form name="form" method="post" action="{% url 'editSingleStud' stud_id=student.studentID %}">
         {% csrf_token %}
         <input type="hidden" id="studentID" name="studentID" value="{{student.studentID}}">
 
-        <label for='lName'>First Name:</label>
+        <label for='fName'>First Name:</label>
         <input type="text" name='fName' id='fName' value="{{student.fName}}" autofocus>
         <br><br>
 
@@ -20,7 +21,7 @@
 
 
         <label for='front'>Front:</label>
-        <input type="checkbox" name='front' id='front' {% if student.front is True %}value="T" checked {% else %} value="F" {% endif %} >
+        <input type="checkbox" name='front' id='front' value="T"{% if student.front is True %} checked {% endif %} >
         <br><br>
         <button type="submit">Update</button>
     </form><br>
@@ -28,10 +29,8 @@
     <form name="form" method="post" action="{% url 'changeRestrictions' stud_id=student.studentID %}">
         {% csrf_token %}
         <label><br>List of Restrictions:<br></label>
-        <p> {{ rest }} </p>
+        <p> {{ rest.fName }} </p>
         <button type="submit">Change Restrictions</button>
     </form>
-
-        
-    
+</div>
 {% endblock %}

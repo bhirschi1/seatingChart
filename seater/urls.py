@@ -10,7 +10,6 @@ urlpatterns = [
     path('delete/<int:stud_id>/', deleteStudPageView, name='deleteStud'),
     path('restrictions/<int:stud_id>/', changeRestrictionsPageView, name='changeRestrictions'),
     path('saveRests/<int:stud_id>/', saveRestsPageView, name='updateRestrictions'),
-    # path('generate/', generatePageView, name='generatePage'),
 ]
 
 

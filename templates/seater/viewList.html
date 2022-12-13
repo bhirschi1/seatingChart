@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<table border="1" bgcolor="gray">
+<table>
     <tr>
       <th>First Name</th>
       <th>Last Name</th>
@@ -8,7 +9,6 @@
     </tr>
     {% for student in students %}
         <tr>
-            
             <td>{{student.fName}}</td> 
             <td>{{student.lName}}</td>
             <td><form name="form" method="post" action="{% url 'editStud' stud_id=student.studentID %}">{% csrf_token %}<button>Edit</button></form>
